@@ -1,3 +1,5 @@
+const { log } = console;
+
 const db = {
   users: [
     { id: '1', name: 'Cristian' },
@@ -14,7 +16,12 @@ const get = (table, id) => {
 };
 
 const upsert = (table, data) => {
+  if(!db[table]){
+    db[table] = [];
+  }
+
   db[table].push(data);
+  log(db);
 };
 
 const remove = (table, id) => {
