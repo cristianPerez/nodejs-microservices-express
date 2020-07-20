@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken');
 
 const config = require('../config');
+const error = require('../utils/error');
 const secret = config.jwt.secret;
-
-const { log } = console;
 
 /**
  * Function to generate a jwt
@@ -24,11 +23,11 @@ const verify = (token) => jwt.verify(token, secret);
 const getToken = (auth) => {
   // Bearer saadsgsdgasdgasgas
   if(!auth) {
-    throw new Error('There is not token');
+    throw error('There is not token', 401);
   }
 
   if(auth.indexOf('Bearer ') === -1) {
-    throw new Error('Invalid token');
+    throw error('Invalid token', 403);
   }
 
   return auth.replace('Bearer ', '');
@@ -49,7 +48,7 @@ const check = {
   own: (req, owner) => {
     const decoded = decodeHeader(req);
     if(decoded.id !== owner) {
-      throw new Error('You are not allowed to do this');
+      throw error('You are not allowed to do this', 401);
     }
   },
 };
