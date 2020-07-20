@@ -18,7 +18,7 @@ const list = async (req, res) => {
     response.success(req, res, list, 200);
   } catch (error) {
     log(error);
-    response.error(req, res, err.message, 500);
+    response.error(req, res, error.message, 500);
   }
 };
 

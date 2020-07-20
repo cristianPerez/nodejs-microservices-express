@@ -20,17 +20,17 @@ module.exports = (injectedStore) => {
   };
 
   const upsert =  async (body) => {
-    const { id, name, userName, password } = body;
+    const { id, name, username, password } = body;
     const user = {
       id: id || nanoid(),
       name,
-      userName, 
+      username, 
     };
 
-    if(password || userName){
+    if(password || username){
       await auth.upsert({
         id: user.id,
-        userName,
+        username,
         password,
       });
     }
