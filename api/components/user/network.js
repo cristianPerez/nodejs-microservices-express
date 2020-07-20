@@ -1,5 +1,6 @@
 const express = require('express');
 
+const security = require('./secure');
 const response  = require('../../../network/response');
 const controller = require('./index');
 
@@ -34,7 +35,7 @@ const get = async (req, res) => {
     response.success(req, res, user, 200);
   } catch (error) { 
     log(error); 
-    response.error(req, res, err.message, 500);
+    response.error(req, res, error.message, 500);
   } 
 };
 
@@ -50,7 +51,7 @@ const upsert = async (req, res) => {
     response.success(req, res, user, 200);
   } catch (error) {
     log(error);
-    response.error(req, res, err.message, 500);
+    response.error(req, res, error.message, 500);
   }
 };
 
@@ -58,6 +59,6 @@ const upsert = async (req, res) => {
 router.get('/', list);
 router.get('/:id', get);
 router.post('/', upsert); 
-router.put('/', upsert); 
+router.put('/', security('update'), upsert); 
 
 module.exports = router;
