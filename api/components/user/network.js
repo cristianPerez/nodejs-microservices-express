@@ -13,13 +13,14 @@ const { log } = console;
  * @param {*} req 
  * @param {*} res 
  */
-const list = async (req, res) => {
+const list = async (req, res, next) => {
   try {
     const list = await controller.list();
     response.success(req, res, list, 200);
   } catch (error) {
-    log(error);
-    response.error(req, res, error.message, 500);
+    log('[error]', error);
+    // We handle the error in other middleware
+    next(error);
   }
 };
 
@@ -28,14 +29,15 @@ const list = async (req, res) => {
  * @param {*} req 
  * @param {*} res  
  */
-const get = async (req, res) => {
+const get = async (req, res, next) => {
   try {
     const { id } = req.params; 
     const user = await controller.get(id);
     response.success(req, res, user, 200);
   } catch (error) { 
-    log(error); 
-    response.error(req, res, error.message, 500);
+    log('[error]', error);
+    // We handle the error in other middleware
+    next(error);
   } 
 };
 
@@ -44,14 +46,15 @@ const get = async (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const upsert = async (req, res) => {
+const upsert = async (req, res, next) => {
    try {
       const { body } = req;
     const user = await controller.upsert(body);
     response.success(req, res, user, 200);
   } catch (error) {
-    log(error);
-    response.error(req, res, error.message, 500);
+    log('[error]', error);
+    // We handle the error in other middleware
+    next(error);
   }
 };
 

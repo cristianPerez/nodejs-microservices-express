@@ -1,6 +1,8 @@
 const auth = require('../../../auth');
 const bcrypt = require('bcrypt');
 
+const error = require('../../../utils/error');
+
 const TABLE = 'auth';
 
 const { log } = console;
@@ -19,13 +21,18 @@ module.exports = (injectedStore) => {
    */
   const login = async (username, password) => {
     const data = await store.query(TABLE, { username });
-    const isValid = bcrypt.compare(password, data.password);
-    if (isValid) {
-      const token = await auth.sign(data);
-      return { token };
+    if (data) {
+      const isValid = bcrypt.compare(password, data.password);
+      if (isValid) {
+        const token = await auth.sign(data);
+        return { token };
+      } else {
+        log('There is an error with the login');
+        throw error("Invalid data", 401);
+      }
     } else {
-      log('There is an error with the login');
-      throw new Error("Invalid data");
+      log('We do not find the username');
+      throw error('We do not find the username', 401);
     }
   };
 
