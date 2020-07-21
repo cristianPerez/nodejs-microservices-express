@@ -26,3 +26,14 @@ CREATE TABLE `auth` (
   `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+DROP TABLE IF EXISTS `user_follow`;
+
+CREATE TABLE `user_follow` (
+  `user_from` varchar(32) DEFAULT NULL,
+  `user_to` varchar(32) DEFAULT NULL
+) CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+/* Creating a unoque index in two columns */
+CREATE UNIQUE INDEX idx_follow
+ON user_follow(user_from,user_to);

@@ -58,10 +58,29 @@ const upsert = async (req, res, next) => {
   }
 };
 
+/**
+ * Function to follow another user.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+const follow = async (req, res, next) => {
+  try {
+    const { user: { id }, params } = req;
+    const followAnswer = await controller.follow(id, params.id);
+    response.success(req, res, followAnswer, 201);
+  } catch (error) {
+    log('[error]', error);
+    // We handle the error in other middleware
+    next(error);
+  }
+};
+
 // Router
 router.get('/', list);
 router.get('/:id', get);
 router.post('/', upsert); 
 router.put('/', security('update'), upsert); 
+router.post('/follow/:id', security('follow'), follow);
 
 module.exports = router;

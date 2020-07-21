@@ -51,6 +51,7 @@ const check = {
       throw error('You are not allowed to do this', 401);
     }
   },
+  logged: (req) => decodeHeader(req),
 };
 
 module.exports = {

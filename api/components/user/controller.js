@@ -7,7 +7,7 @@ const TABLE = 'user';
 module.exports = (injectedStore) => {
   let store = injectedStore;
 
-  if(!store) {
+  if (!store) {
     store = require('../../../store/mysql');
   }
 
@@ -19,15 +19,15 @@ module.exports = (injectedStore) => {
     return store.get(TABLE, id);
   };
 
-  const upsert =  async (body) => {
+  const upsert = async (body) => {
     const { id, name, username, password } = body;
     const user = {
       id: id || nanoid(),
       name,
-      username, 
+      username,
     };
 
-    if(password || username){
+    if (password || username) {
       await auth.upsert({
         id: user.id,
         username,
@@ -38,9 +38,20 @@ module.exports = (injectedStore) => {
     return store.upsert(TABLE, user);
   };
 
-  return  {
+  /**
+   * Function to follow another user.
+   * @param {*} from
+   * @param {*} to 
+   */
+  const follow = (from, to) => store.upsert(`${TABLE}_follow`, {
+    user_from: from,
+    user_to: to
+  });
+
+  return {
     list,
     get,
     upsert,
+    follow,
   };
 };
