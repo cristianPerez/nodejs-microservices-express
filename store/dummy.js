@@ -1,7 +1,7 @@
 const { log } = console;
 
 const db = {
-  users: [
+  user: [
     { id: '1', name: 'Cristian' },
   ],
 };

@@ -2,13 +2,13 @@ const { nanoid } = require('nanoid');
 
 const auth = require('../auth');
 
-const TABLE = 'users';
+const TABLE = 'user';
 
 module.exports = (injectedStore) => {
   let store = injectedStore;
 
   if(!store) {
-    store = require('../../../store/dummy');
+    store = require('../../../store/mysql');
   }
 
   const list = async () => {
