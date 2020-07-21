@@ -22,9 +22,9 @@ module.exports = (injectedStore) => {
   const login = async (username, password) => {
     const data = await store.query(TABLE, { username });
     if (data) {
-      const isValid = bcrypt.compare(password, data.password);
+      const isValid = await bcrypt.compare(password, data.password);
       if (isValid) {
-        const token = await auth.sign(data);
+        const token = await auth.sign({ username, password, id: data.id });
         return { token };
       } else {
         log('There is an error with the login');

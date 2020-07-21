@@ -15,12 +15,9 @@ const { log } = console;
 const login = async (req, res, next) => {
   try {
     const { body: { username, password } } = req;
-    debugger
     const token = await controller.login(username, password);
-    debugger
     response.success(req, res, token, 200);
   } catch (error) {
-    debugger
     log('[error]', error);
     // We handle the error in other middleware
     next(error);

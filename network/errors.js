@@ -10,7 +10,6 @@ const { log } = console;
  * @param {*} next 
  */
 const errors = (err, req, res, next) => {
-  debugger
   log('[error of errors]', err);
   const message = err.message || 'Intern error';
   const status = err.statusCode || 500;

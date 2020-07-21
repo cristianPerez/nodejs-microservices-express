@@ -11,6 +11,9 @@ const { log } = console;
 // Connect
 let connection;
 
+/**
+ * Function to handle the connection with mysql.
+ */
 const handleConn = () => {
   connection = mysql.createConnection(dbConfig);
 
@@ -63,6 +66,11 @@ const get = (table, id) => {
   });
 };
 
+/**
+ * Function to insert one row in a table.
+ * @param {*} table 
+ * @param {*} row 
+ */
 const insert = (table, row) => {
   return new Promise ((resolve, reject) => {
     connection.query(`INSERT INTO ${table} SET ?`, row, (err, data) => {
@@ -72,11 +80,51 @@ const insert = (table, row) => {
   });
 };
 
-const upsert = (table, row) => insert(table, row);
+/**
+ * Function to update a row.
+ * @param {*} table 
+ * @param {*} row 
+ */
+const update = (table, row) => {
+  return new Promise ((resolve, reject) => {
+    connection.query(`UPDATE ${table} SET ? WHERE id=?`, [row, row.id], (err, data) => {
+      if(err) return reject(err);
+      resolve(data)
+    });
+  });
+};
+
+/**
+ * Function to update or insert one row.
+ * @param {*} table 
+ * @param {*} row 
+ */
+const upsert = (table, row) => {
+  if(row && row.id) {
+    return update(table, row);
+  } else {
+    return insert(table, row);
+  }
+};
+
+/**
+ * Function to query any table.
+ * @param {*} table 
+ * @param {*} query 
+ */
+const query = (table, query) => {
+  return new Promise((resolve, reject) => {
+    connection.query(`SELECT * FROM ${table} WHERE ?`, query, (err, data) => {
+      if(err) return reject(err);
+      resolve(data[0] || null)
+    });
+  });
+};
 
 
 module.exports = {
   list,
   get,
   upsert,
+  query,
 };
