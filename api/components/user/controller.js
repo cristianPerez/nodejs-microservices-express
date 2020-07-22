@@ -11,14 +11,14 @@ module.exports = (injectedStore) => {
     store = require('../../../store/mysql');
   }
 
-  const list = async () => {
-    return store.list(TABLE);
-  };
+  const list = () => store.list(TABLE);
 
-  const get = async (id) => {
-    return store.get(TABLE, id);
-  };
+  const get = (id) => store.get(TABLE, id);
 
+  /**
+   * Function for insert or update a post.
+   * @param {*} body 
+   */
   const upsert = async (body) => {
     const { id, name, username, password } = body;
     const user = {
@@ -48,10 +48,22 @@ module.exports = (injectedStore) => {
     user_to: to
   });
 
+  /**
+   * Function to follow another user.
+   * @param {*} user 
+   */
+  const following = (user) => {
+    const join = {};
+    join[TABLE] = 'user_to'; // { USER: `user_to` }
+    const query = { user_from: user };
+    return store.query(`${TABLE}_follow`, query, join);
+  };
+
   return {
     list,
     get,
     upsert,
     follow,
+    following,
   };
 };

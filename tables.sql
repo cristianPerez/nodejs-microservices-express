@@ -37,3 +37,16 @@ CREATE TABLE `user_follow` (
 /* Creating a unoque index in two columns */
 CREATE UNIQUE INDEX idx_follow
 ON user_follow(user_from,user_to);
+
+DROP TABLE IF EXISTS `post`;
+
+CREATE TABLE `post` (
+  `id` varchar(32) UNIQUE,
+  `text` varchar(200) DEFAULT NULL,
+  `user_id` varchar(32) DEFAULT NULL,
+  `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `user` VALUES ('999','New post', '123', '2020-07-21 08:20:00','2020-07-21 08:20:00');

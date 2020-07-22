@@ -1,6 +1,5 @@
 const express = require('express');
 
-const security = require('./secure');
 const response  = require('../../../network/response');
 const controller = require('./index');
 
@@ -32,8 +31,8 @@ const list = async (req, res, next) => {
 const get = async (req, res, next) => {
   try {
     const { id } = req.params; 
-    const user = await controller.get(id);
-    response.success(req, res, user, 200);
+    const post = await controller.get(id);
+    response.success(req, res, post, 200);
   } catch (error) { 
     log('[error]', error);
     // We handle the error in other middleware
@@ -42,13 +41,13 @@ const get = async (req, res, next) => {
 };
 
 /**
- * Method to insert or put a user.
+ * Method to insert or put a post.
  * @param {*} req 
  * @param {*} res 
  */
 const upsert = async (req, res, next) => {
-   try {
-      const { body } = req;
+  try {
+    const { body } = req;
     const user = await controller.upsert(body);
     response.success(req, res, user, 200);
   } catch (error) {
@@ -58,48 +57,10 @@ const upsert = async (req, res, next) => {
   }
 };
 
-/**
- * Function to follow another user.
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- */
-const follow = async (req, res, next) => {
-  try {
-    const { user: { id }, params } = req;
-    const followAnswer = await controller.follow(id, params.id);
-    response.success(req, res, followAnswer, 201);
-  } catch (error) {
-    log('[error]', error);
-    // We handle the error in other middleware
-    next(error);
-  }
-};
-
-/**
- * Function to fins who is following to other.
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- */
-const following = async (req, res, next) => {
-  try {
-    const { params: { id } } = req;
-    const following = await controller.following(id);
-    response.success(req, res, following, 201);
-  } catch (error) {
-    log('[error]', error);
-    // We handle the error in other middleware
-    next(error);
-  }
-};
 
 // Router
 router.get('/', list);
 router.get('/:id', get);
 router.post('/', upsert); 
-router.put('/', security('update'), upsert); 
-router.post('/follow/:id', security('follow'), follow);
-router.post('/following/:id', following);
 
 module.exports = router;
