@@ -23,7 +23,6 @@ function createRemoteBD(host, port) {
           log('[Remote BD ERROR]', err);
           return reject(err.message);
         }
-        debugger
         const resp = JSON.parse(body);
         return resolve(resp.body);
       });
