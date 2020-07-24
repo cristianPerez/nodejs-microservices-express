@@ -11,3 +11,4 @@ server/config/origins.json
 package-lock.json
 ecosystem.config.js
 .idea
+.now
