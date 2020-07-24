@@ -2,6 +2,9 @@ module.exports =  {
   api: {
     port: process.env.PORT || 3000,
   },
+  post: {
+    port: process.env.POST_PORT || 3002,
+  },
   jwt: {
     secret: process.env.secret || 'secret',
   },
