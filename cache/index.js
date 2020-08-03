@@ -16,5 +16,5 @@ app.use('/', data);
 app.use(errors);
 
 app.listen(config.cacheService.port, () => {
-  log('Mysql service listening on port', config.cacheService.port);
+  log('Redis service listening on port', config.cacheService.port);
 });
