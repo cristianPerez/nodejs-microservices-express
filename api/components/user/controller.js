@@ -4,15 +4,36 @@ const auth = require('../auth');
 
 const TABLE = 'user';
 
-module.exports = (injectedStore) => {
+const { log } = console;
+
+module.exports = (injectedStore, injectedCache) => {
+  let cache = injectedCache;
   let store = injectedStore;
 
   if (!store) {
     store = require('../../../store/mysql');
   }
 
-  const list = () => store.list(TABLE);
+  if(!cache) {
+    cache = require('../../../store/dummy ');
+  }
 
+  const list = async () => {
+    let users = await cache.list(TABLE);
+    if(!users) {
+      log('No in cache, search in dat abase');
+      users = await store.list(TABLE);
+      cache.upsert(TABLE, users);
+    } else {
+      log('We got the users from cache');
+    }
+    return users;
+  }
+  
+  /**
+   * Function to get a row based in id.
+   * @param {*} id 
+   */
   const get = (id) => store.get(TABLE, id);
 
   /**
